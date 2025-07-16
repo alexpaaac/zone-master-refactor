@@ -177,7 +177,12 @@ export function GameCard({
         <Button
           variant="gaming"
           className="flex-1"
-          onClick={handlePlay}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('GameCard Play button clicked:', game.title);
+            handlePlay();
+          }}
           disabled={isLoading || !game.isActive}
         >
           <Play className="mr-2 h-4 w-4" />

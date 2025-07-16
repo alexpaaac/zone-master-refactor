@@ -46,7 +46,7 @@ export function Sidebar({ isOpen, onToggle, currentPath = '/' }: SidebarProps) {
           // Desktop: normal flow positioning  
           "md:h-screen md:z-auto md:flex-shrink-0",
           // Width management
-          isOpen ? "w-64" : "w-0 md:w-16",
+          isOpen ? "w-64" : "w-0 overflow-hidden md:w-16 md:overflow-visible",
           // Mobile hide when closed
           !isOpen && "md:w-16"
         )}
@@ -77,7 +77,10 @@ export function Sidebar({ isOpen, onToggle, currentPath = '/' }: SidebarProps) {
               return (
                 <button
                   key={item.name}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Button clicked:', item.name, 'isClickable:', isClickable);
                     if (isClickable) {
                       // Navigation would go here
                       console.log(`Navigate to ${item.href}`);

@@ -118,7 +118,15 @@ const Index = () => {
             </p>
           </div>
           
-          <Button variant="gaming" className="self-start">
+          <Button 
+            variant="gaming" 
+            className="self-start"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log('Create New Game button clicked');
+            }}
+          >
             <Plus className="mr-2 h-4 w-4" />
             Create New Game
           </Button>
