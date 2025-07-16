@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { 
   Home, 
   Gamepad2, 
@@ -19,14 +19,16 @@ interface SidebarProps {
 }
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: Home },
-  { name: 'Games', href: '/games', icon: Gamepad2 },
-  { name: 'Risk Zones', href: '/zones', icon: Shield },
-  { name: 'Analytics', href: '/analytics', icon: BarChart3 },
-  { name: 'Settings', href: '/settings', icon: Settings },
+  { name: 'Dashboard', href: '/', icon: Home, isActive: true },
+  { name: 'Games', href: '/games', icon: Gamepad2, isActive: false },
+  { name: 'Risk Zones', href: '/zones', icon: Shield, isActive: false },
+  { name: 'Analytics', href: '/analytics', icon: BarChart3, isActive: false },
+  { name: 'Settings', href: '/settings', icon: Settings, isActive: false },
 ];
 
 export function Sidebar({ isOpen, onToggle }: SidebarProps) {
+  const location = useLocation();
+  const currentPath = location.pathname;
   return (
     <>
       {/* Mobile overlay */}
@@ -64,24 +66,40 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
           
           {/* Navigation */}
           <nav className="flex-1 space-y-2 p-2">
-            {navigation.map((item) => (
-              <NavLink
-                key={item.name}
-                to={item.href}
-                end={item.href === '/'}
-                className={({ isActive }) =>
-                  cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all",
+            {navigation.map((item) => {
+              const isActive = currentPath === item.href;
+              const isClickable = item.href === '/'; // Only dashboard is clickable for now
+              
+              return (
+                <button
+                  key={item.name}
+                  onClick={() => {
+                    if (isClickable) {
+                      // Navigation would go here
+                      console.log(`Navigate to ${item.href}`);
+                    } else {
+                      console.log(`${item.name} - Coming soon!`);
+                    }
+                  }}
+                  disabled={!isClickable}
+                  className={cn(
+                    "w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all text-left",
                     "hover:bg-accent hover:text-accent-foreground",
                     isActive && "bg-primary text-primary-foreground shadow-glow",
+                    !isClickable && "opacity-60 cursor-not-allowed",
                     !isOpen && "md:justify-center md:px-2"
-                  )
-                }
-              >
-                <item.icon className="h-5 w-5 shrink-0" />
-                {isOpen && <span className="truncate">{item.name}</span>}
-              </NavLink>
-            ))}
+                  )}
+                >
+                  <item.icon className="h-5 w-5 shrink-0" />
+                  {isOpen && <span className="truncate">{item.name}</span>}
+                  {isOpen && !isClickable && (
+                    <span className="ml-auto text-xs bg-muted text-muted-foreground px-2 py-1 rounded">
+                      Soon
+                    </span>
+                  )}
+                </button>
+              );
+            })}
             
             {/* Quick actions */}
             <div className="pt-4 mt-4 border-t">
