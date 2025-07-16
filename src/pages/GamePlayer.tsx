@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { Timer, Target, MousePointer, CheckCircle2, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/contexts/AppContext';
+import { GameResultsScreen } from '@/components/games/GameResultsScreen';
+import { useNavigate } from 'react-router-dom';
 
 interface GameSession {
   id: string;
@@ -29,6 +31,7 @@ interface GameSession {
 export default function GamePlayer() {
   const { toast } = useToast();
   const { currentGame, updateCurrentSession } = useApp();
+  const navigate = useNavigate();
   
   const [gameSession, setGameSession] = useState<GameSession | null>(null);
   const [timeRemaining, setTimeRemaining] = useState(0);
@@ -138,10 +141,11 @@ export default function GamePlayer() {
     // Check click limit
     if (gameSession.clicks.length >= (currentGame.maxClicks || 17)) {
       toast({
-        title: "Click Limit Reached",
-        description: "No more clicks allowed!",
+        title: "No More Clicks!",
+        description: "You've used all your clicks. Game ending...",
         variant: "destructive"
       });
+      endGame(); // Auto-end game when out of clicks
       return;
     }
 
@@ -201,6 +205,13 @@ export default function GamePlayer() {
       if (updatedSession.foundZones.length >= (currentGame.targetRisks || currentGame.riskZones.length)) {
         endGame();
       }
+    }
+
+    // Auto-end game if this was the last click
+    if (updatedSession.clicks.length >= (currentGame.maxClicks || 17)) {
+      setTimeout(() => {
+        endGame();
+      }, 1000); // Small delay to show the click result
     }
 
     // Redraw canvas with new click
@@ -349,6 +360,36 @@ export default function GamePlayer() {
           <h2 className="text-2xl font-bold mb-4">No Game Selected</h2>
           <p className="text-muted-foreground">Please select a game to play.</p>
         </div>
+      </Layout>
+    );
+  }
+
+  // Handle restart game
+  const handlePlayAgain = () => {
+    setGameSession(null);
+    setTimeRemaining(0);
+    setIsGameActive(false);
+    setGameCompleted(false);
+    setShowNameInput(true);
+    setPlayerName('');
+  };
+
+  // Handle back to games
+  const handleBackToMenu = () => {
+    navigate('/games');
+  };
+
+  // Show results screen when game is completed
+  if (gameCompleted && gameSession) {
+    return (
+      <Layout>
+        <GameResultsScreen
+          game={currentGame}
+          session={gameSession}
+          playerName={playerName}
+          onPlayAgain={handlePlayAgain}
+          onBackToMenu={handleBackToMenu}
+        />
       </Layout>
     );
   }

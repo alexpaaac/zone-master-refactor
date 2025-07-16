@@ -207,8 +207,13 @@ export function AppProvider({ children }: AppProviderProps) {
 
   const updateCurrentGame = (game: Game) => {
     dispatch({ type: 'SET_CURRENT_GAME', payload: game });
-    // Also update in games array
-    dispatch({ type: 'UPDATE_GAME', payload: { id: game.id, updates: game } });
+    // Check if game exists in array, if not add it
+    const gameExists = state.games.some(g => g.id === game.id);
+    if (gameExists) {
+      dispatch({ type: 'UPDATE_GAME', payload: { id: game.id, updates: game } });
+    } else {
+      dispatch({ type: 'ADD_GAME', payload: game });
+    }
   };
 
   const updateGame = (id: string, updates: Partial<Game>) => {

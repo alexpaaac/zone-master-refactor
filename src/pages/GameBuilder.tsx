@@ -10,6 +10,7 @@ import { Switch } from '@/components/ui/switch';
 import { Upload, Circle, Square, Undo, Redo, Save } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/contexts/AppContext';
+import { RiskZoneEditor } from '@/components/games/RiskZoneEditor';
 
 interface GameConfig {
   name: string;
@@ -107,14 +108,20 @@ export default function GameBuilder() {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    // Check if clicking on existing zone
+    // Scale coordinates to original image size
+    const scaleX = (imageRef.current.naturalWidth || canvas.width) / canvas.width;
+    const scaleY = (imageRef.current.naturalHeight || canvas.height) / canvas.height;
+    const originalX = x * scaleX;
+    const originalY = y * scaleY;
+
+    // Check if clicking on existing zone (using original coordinates)
     const clickedZone = riskZones.find(zone => {
       if (zone.type === 'circle') {
-        const distance = Math.sqrt((x - zone.x) ** 2 + (y - zone.y) ** 2);
+        const distance = Math.sqrt((originalX - zone.x) ** 2 + (originalY - zone.y) ** 2);
         return distance <= (zone.radius || 0);
       } else {
-        return x >= zone.x && x <= zone.x + (zone.width || 0) &&
-               y >= zone.y && y <= zone.y + (zone.height || 0);
+        return originalX >= zone.x && originalX <= zone.x + (zone.width || 0) &&
+               originalY >= zone.y && originalY <= zone.y + (zone.height || 0);
       }
     });
 
@@ -123,7 +130,7 @@ export default function GameBuilder() {
       return;
     }
 
-    // Start drawing new zone
+    // Start drawing new zone at original coordinates
     saveToUndoStack();
     setIsDrawing(true);
     setSelectedZone(null);
@@ -131,21 +138,38 @@ export default function GameBuilder() {
     const newZone: RiskZone = {
       id: `zone-${Date.now()}`,
       type: selectedTool,
-      x,
-      y,
+      x: originalX,
+      y: originalY,
       color: '#ef4444',
       description: `Risk Zone ${riskZones.length + 1}`,
       severity: 'medium'
     };
 
     if (selectedTool === 'circle') {
-      newZone.radius = 20;
+      newZone.radius = 30;
     } else {
-      newZone.width = 40;
-      newZone.height = 40;
+      newZone.width = 60;
+      newZone.height = 60;
     }
 
     setRiskZones(prev => [...prev, newZone]);
+  };
+
+  // Update risk zone
+  const handleZoneUpdate = (zoneId: string, updates: Partial<RiskZone>) => {
+    saveToUndoStack();
+    setRiskZones(prev => prev.map(zone => 
+      zone.id === zoneId ? { ...zone, ...updates } : zone
+    ));
+  };
+
+  // Delete risk zone
+  const handleZoneDelete = (zoneId: string) => {
+    saveToUndoStack();
+    setRiskZones(prev => prev.filter(zone => zone.id !== zoneId));
+    if (selectedZone === zoneId) {
+      setSelectedZone(null);
+    }
   };
 
   // Draw risk zones on canvas
@@ -162,7 +186,11 @@ export default function GameBuilder() {
     // Draw image
     ctx.drawImage(imageRef.current, 0, 0, canvas.width, canvas.height);
 
-    // Draw risk zones
+    // Calculate scale for display
+    const scaleX = canvas.width / (imageRef.current.naturalWidth || canvas.width);
+    const scaleY = canvas.height / (imageRef.current.naturalHeight || canvas.height);
+
+    // Draw risk zones (scale from original coordinates to display coordinates)
     riskZones.forEach(zone => {
       ctx.strokeStyle = zone.id === selectedZone ? '#00ff00' : zone.color;
       ctx.lineWidth = zone.id === selectedZone ? 3 : 2;
@@ -171,9 +199,20 @@ export default function GameBuilder() {
       ctx.beginPath();
       
       if (zone.type === 'circle') {
-        ctx.arc(zone.x, zone.y, zone.radius || 20, 0, 2 * Math.PI);
+        ctx.arc(
+          zone.x * scaleX, 
+          zone.y * scaleY, 
+          (zone.radius || 20) * scaleX, 
+          0, 
+          2 * Math.PI
+        );
       } else {
-        ctx.rect(zone.x, zone.y, zone.width || 40, zone.height || 40);
+        ctx.rect(
+          zone.x * scaleX, 
+          zone.y * scaleY, 
+          (zone.width || 40) * scaleX, 
+          (zone.height || 40) * scaleY
+        );
       }
       
       ctx.fill();
@@ -183,8 +222,12 @@ export default function GameBuilder() {
       ctx.fillStyle = '#000000';
       ctx.font = '12px Arial';
       ctx.textAlign = 'center';
-      const textX = zone.type === 'circle' ? zone.x : zone.x + (zone.width || 40) / 2;
-      const textY = zone.type === 'circle' ? zone.y + 4 : zone.y + (zone.height || 40) / 2;
+      const textX = zone.type === 'circle' 
+        ? zone.x * scaleX 
+        : zone.x * scaleX + (zone.width || 40) * scaleX / 2;
+      const textY = zone.type === 'circle' 
+        ? zone.y * scaleY + 4 
+        : zone.y * scaleY + (zone.height || 40) * scaleY / 2;
       ctx.fillText(zone.description, textX, textY);
     });
   };
@@ -193,8 +236,19 @@ export default function GameBuilder() {
   const handleImageLoad = () => {
     if (canvasRef.current && imageRef.current) {
       const canvas = canvasRef.current;
-      canvas.width = imageRef.current.naturalWidth;
-      canvas.height = imageRef.current.naturalHeight;
+      const maxWidth = 800;
+      const maxHeight = 600;
+      
+      const aspectRatio = imageRef.current.naturalWidth / imageRef.current.naturalHeight;
+      
+      if (aspectRatio > maxWidth / maxHeight) {
+        canvas.width = maxWidth;
+        canvas.height = maxWidth / aspectRatio;
+      } else {
+        canvas.height = maxHeight;
+        canvas.width = maxHeight * aspectRatio;
+      }
+      
       drawRiskZones();
     }
   };
@@ -260,6 +314,7 @@ export default function GameBuilder() {
       })),
       timeLimit: gameConfig.timeLimit,
       maxClicks: gameConfig.maxClicks,
+      targetRisks: gameConfig.targetRisks,
       difficulty: 'medium' as const,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -270,7 +325,7 @@ export default function GameBuilder() {
 
     toast({
       title: "Success",
-      description: "Game created successfully!",
+      description: "Game created successfully! You can now play it.",
       variant: "default"
     });
   };
@@ -435,40 +490,35 @@ export default function GameBuilder() {
                         )}
                       </div>
                       
-                      <div className="relative border rounded-lg overflow-hidden max-w-4xl">
-                        <img
-                          ref={imageRef}
-                          src={imagePreview}
-                          alt="Game background"
-                          className="hidden"
-                          onLoad={handleImageLoad}
-                        />
-                        <canvas
-                          ref={canvasRef}
-                          onMouseDown={handleCanvasMouseDown}
-                          className="block max-w-full h-auto cursor-crosshair"
-                          style={{ maxHeight: '600px' }}
-                        />
-                      </div>
-                      
-                      {riskZones.length > 0 && (
-                        <div className="space-y-2">
-                          <h4 className="font-semibold">Risk Zones ({riskZones.length})</h4>
-                          <div className="space-y-1 max-h-32 overflow-y-auto">
-                            {riskZones.map((zone, index) => (
-                              <div
-                                key={zone.id}
-                                className={`text-sm p-2 rounded border cursor-pointer ${
-                                  selectedZone === zone.id ? 'bg-primary text-primary-foreground' : 'hover:bg-accent'
-                                }`}
-                                onClick={() => setSelectedZone(zone.id)}
-                              >
-                                {index + 1}. {zone.description} ({zone.type})
-                              </div>
-                            ))}
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        <div className="lg:col-span-2">
+                          <div className="relative border rounded-lg overflow-hidden">
+                            <img
+                              ref={imageRef}
+                              src={imagePreview}
+                              alt="Game background"
+                              className="hidden"
+                              onLoad={handleImageLoad}
+                            />
+                            <canvas
+                              ref={canvasRef}
+                              onMouseDown={handleCanvasMouseDown}
+                              className="block max-w-full h-auto cursor-crosshair"
+                              style={{ maxHeight: '600px' }}
+                            />
                           </div>
                         </div>
-                      )}
+                        
+                        <div className="space-y-4">
+                          <RiskZoneEditor
+                            zones={riskZones}
+                            selectedZoneId={selectedZone}
+                            onZoneUpdate={handleZoneUpdate}
+                            onZoneDelete={handleZoneDelete}
+                            onZoneSelect={setSelectedZone}
+                          />
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
