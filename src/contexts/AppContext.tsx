@@ -167,12 +167,19 @@ interface AppContextType {
   setLoading: (loading: boolean) => void;
   setError: (error: string | undefined) => void;
   setCurrentGame: (game: Game | undefined) => void;
+  updateCurrentGame: (game: Game) => void;
   updateGame: (id: string, updates: Partial<Game>) => void;
   addRiskZone: (gameId: string, zone: RiskZone) => void;
   updateRiskZone: (gameId: string, zoneId: string, updates: Partial<RiskZone>) => void;
   deleteRiskZone: (gameId: string, zoneId: string) => void;
   updateCanvas: (updates: Partial<CanvasState>) => void;
   updateZoneEditor: (updates: Partial<ZoneEditorState>) => void;
+  updateCurrentSession: (session: GameSession) => void;
+  // Computed properties
+  currentGame: Game | undefined;
+  currentSession: GameSession | undefined;
+  games: Game[];
+  setGames: (games: Game[]) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -198,8 +205,22 @@ export function AppProvider({ children }: AppProviderProps) {
     dispatch({ type: 'SET_CURRENT_GAME', payload: game });
   };
 
+  const updateCurrentGame = (game: Game) => {
+    dispatch({ type: 'SET_CURRENT_GAME', payload: game });
+    // Also update in games array
+    dispatch({ type: 'UPDATE_GAME', payload: { id: game.id, updates: game } });
+  };
+
   const updateGame = (id: string, updates: Partial<Game>) => {
     dispatch({ type: 'UPDATE_GAME', payload: { id, updates } });
+  };
+
+  const updateCurrentSession = (session: GameSession) => {
+    dispatch({ type: 'SET_CURRENT_SESSION', payload: session });
+  };
+
+  const setGames = (games: Game[]) => {
+    dispatch({ type: 'SET_GAMES', payload: games });
   };
 
   const addRiskZone = (gameId: string, zone: RiskZone) => {
@@ -228,12 +249,19 @@ export function AppProvider({ children }: AppProviderProps) {
     setLoading,
     setError,
     setCurrentGame,
+    updateCurrentGame,
     updateGame,
     addRiskZone,
     updateRiskZone,
     deleteRiskZone,
     updateCanvas,
     updateZoneEditor,
+    updateCurrentSession,
+    // Computed properties
+    currentGame: state.currentGame,
+    currentSession: state.currentSession,
+    games: state.games,
+    setGames,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

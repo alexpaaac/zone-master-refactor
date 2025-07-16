@@ -37,6 +37,7 @@ export interface Game {
   riskZones: RiskZone[];
   timeLimit?: number;
   maxClicks?: number;
+  targetRisks?: number;
   difficulty: 'easy' | 'medium' | 'hard' | 'expert';
   branding?: {
     primaryColor: string;
