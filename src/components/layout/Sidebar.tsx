@@ -85,17 +85,20 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
             
             {/* Quick actions */}
             <div className="pt-4 mt-4 border-t">
-              <Button
-                variant="gaming-outline"
-                size="sm"
-                className={cn(
-                  "w-full justify-start gap-2",
-                  !isOpen && "md:w-auto md:px-2"
-                )}
+              <NavLink
+                to="/builder"
+                className={({ isActive }) =>
+                  cn(
+                    "flex items-center gap-2 w-full justify-start rounded-lg px-3 py-2 text-sm font-medium transition-all",
+                    "hover:bg-accent hover:text-accent-foreground",
+                    isActive && "bg-primary text-primary-foreground",
+                    !isOpen && "md:justify-center md:px-2"
+                  )
+                }
               >
                 <Plus className="h-4 w-4 shrink-0" />
                 {isOpen && <span>New Game</span>}
-              </Button>
+              </NavLink>
             </div>
           </nav>
           
