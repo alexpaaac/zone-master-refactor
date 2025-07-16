@@ -40,9 +40,15 @@ export function Sidebar({ isOpen, onToggle, currentPath = '/' }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-16 h-[calc(100vh-4rem)] bg-card border-r transition-all duration-300 z-50",
-          "md:relative md:top-0 md:h-screen md:z-auto",
-          isOpen ? "w-64" : "w-0 md:w-16"
+          "bg-card border-r transition-all duration-300",
+          // Mobile: fixed positioning with overlay
+          "fixed left-0 top-16 h-[calc(100vh-4rem)] z-50 md:static",
+          // Desktop: normal flow positioning  
+          "md:h-screen md:z-auto md:flex-shrink-0",
+          // Width management
+          isOpen ? "w-64" : "w-0 md:w-16",
+          // Mobile hide when closed
+          !isOpen && "md:w-16"
         )}
       >
         <div className="flex h-full flex-col">
