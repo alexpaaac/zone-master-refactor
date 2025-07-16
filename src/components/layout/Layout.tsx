@@ -1,5 +1,4 @@
 import { useState, ReactNode } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
 import { cn } from '@/lib/utils';
@@ -10,7 +9,6 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const location = useLocation();
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
@@ -26,9 +24,15 @@ export function Layout({ children }: LayoutProps) {
       <Header onMenuToggle={toggleSidebar} user={user} />
       
       <div className="flex">
-        <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} currentPath={location.pathname} />
+        <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
         
-        <main className="flex-1 min-w-0">
+        <main 
+          className={cn(
+            "flex-1 transition-all duration-300",
+            "md:ml-0",
+            sidebarOpen ? "md:ml-64" : "md:ml-16"
+          )}
+        >
           <div className="p-6">
             {children}
           </div>

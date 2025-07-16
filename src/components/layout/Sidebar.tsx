@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { 
   Home, 
   Gamepad2, 
@@ -15,18 +16,17 @@ import { cn } from '@/lib/utils';
 interface SidebarProps {
   isOpen: boolean;
   onToggle: () => void;
-  currentPath?: string; // Make this optional
 }
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: Home, isActive: true },
-  { name: 'Games', href: '/games', icon: Gamepad2, isActive: false },
-  { name: 'Risk Zones', href: '/zones', icon: Shield, isActive: false },
-  { name: 'Analytics', href: '/analytics', icon: BarChart3, isActive: false },
-  { name: 'Settings', href: '/settings', icon: Settings, isActive: false },
+  { name: 'Dashboard', href: '/', icon: Home },
+  { name: 'Games', href: '/games', icon: Gamepad2 },
+  { name: 'Risk Zones', href: '/zones', icon: Shield },
+  { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+  { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
-export function Sidebar({ isOpen, onToggle, currentPath = '/' }: SidebarProps) {
+export function Sidebar({ isOpen, onToggle }: SidebarProps) {
   return (
     <>
       {/* Mobile overlay */}
@@ -40,15 +40,9 @@ export function Sidebar({ isOpen, onToggle, currentPath = '/' }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "bg-card border-r transition-all duration-300",
-          // Mobile: fixed positioning with overlay
-          "fixed left-0 top-16 h-[calc(100vh-4rem)] z-50 md:static",
-          // Desktop: normal flow positioning  
-          "md:h-screen md:z-auto md:flex-shrink-0",
-          // Width management
-          isOpen ? "w-64" : "w-0 overflow-hidden md:w-16 md:overflow-visible",
-          // Mobile hide when closed
-          !isOpen && "md:w-16"
+          "fixed left-0 top-16 h-[calc(100vh-4rem)] bg-card border-r transition-all duration-300 z-50",
+          "md:relative md:top-0 md:h-screen md:z-auto",
+          isOpen ? "w-64" : "w-0 md:w-16"
         )}
       >
         <div className="flex h-full flex-col">
@@ -70,43 +64,24 @@ export function Sidebar({ isOpen, onToggle, currentPath = '/' }: SidebarProps) {
           
           {/* Navigation */}
           <nav className="flex-1 space-y-2 p-2">
-            {navigation.map((item) => {
-              const isActive = currentPath === item.href;
-              const isClickable = item.href === '/'; // Only dashboard is clickable for now
-              
-              return (
-                <button
-                  key={item.name}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Button clicked:', item.name, 'isClickable:', isClickable);
-                    if (isClickable) {
-                      // Navigation would go here
-                      console.log(`Navigate to ${item.href}`);
-                    } else {
-                      console.log(`${item.name} - Coming soon!`);
-                    }
-                  }}
-                  disabled={!isClickable}
-                  className={cn(
-                    "w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all text-left",
+            {navigation.map((item) => (
+              <NavLink
+                key={item.name}
+                to={item.href}
+                end={item.href === '/'}
+                className={({ isActive }) =>
+                  cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all",
                     "hover:bg-accent hover:text-accent-foreground",
                     isActive && "bg-primary text-primary-foreground shadow-glow",
-                    !isClickable && "opacity-60 cursor-not-allowed",
                     !isOpen && "md:justify-center md:px-2"
-                  )}
-                >
-                  <item.icon className="h-5 w-5 shrink-0" />
-                  {isOpen && <span className="truncate">{item.name}</span>}
-                  {isOpen && !isClickable && (
-                    <span className="ml-auto text-xs bg-muted text-muted-foreground px-2 py-1 rounded">
-                      Soon
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+                  )
+                }
+              >
+                <item.icon className="h-5 w-5 shrink-0" />
+                {isOpen && <span className="truncate">{item.name}</span>}
+              </NavLink>
+            ))}
             
             {/* Quick actions */}
             <div className="pt-4 mt-4 border-t">

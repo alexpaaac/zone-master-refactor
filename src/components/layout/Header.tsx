@@ -29,12 +29,8 @@ export function Header({ onMenuToggle, user }: HeaderProps) {
           <Button
             variant="ghost"
             size="icon"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              console.log('Header menu toggle clicked');
-              onMenuToggle?.();
-            }}
+            onClick={onMenuToggle}
+            className="md:hidden"
           >
             <Menu className="h-5 w-5" />
           </Button>
