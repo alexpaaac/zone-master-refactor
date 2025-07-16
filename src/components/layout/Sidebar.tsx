@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { 
   Home, 
   Gamepad2, 
@@ -16,6 +15,7 @@ import { cn } from '@/lib/utils';
 interface SidebarProps {
   isOpen: boolean;
   onToggle: () => void;
+  currentPath?: string; // Make this optional
 }
 
 const navigation = [
@@ -26,9 +26,7 @@ const navigation = [
   { name: 'Settings', href: '/settings', icon: Settings, isActive: false },
 ];
 
-export function Sidebar({ isOpen, onToggle }: SidebarProps) {
-  const location = useLocation();
-  const currentPath = location.pathname;
+export function Sidebar({ isOpen, onToggle, currentPath = '/' }: SidebarProps) {
   return (
     <>
       {/* Mobile overlay */}
