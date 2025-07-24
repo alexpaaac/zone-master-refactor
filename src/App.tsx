@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import Games from "./pages/Games";
 import RiskZones from "./pages/RiskZones";
 import Analytics from "./pages/Analytics";
+import SharedGamePlayer from "./pages/SharedGamePlayer";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/games" element={<Games />} />
             <Route path="/builder" element={<GameBuilder />} />
             <Route path="/play" element={<GamePlayer />} />
+            <Route path="/play/shared/:gameId" element={<SharedGamePlayer />} />
             <Route path="/results" element={<GameResults />} />
             <Route path="/zones" element={<RiskZones />} />
             <Route path="/analytics" element={<Analytics />} />

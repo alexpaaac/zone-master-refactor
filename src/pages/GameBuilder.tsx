@@ -11,6 +11,7 @@ import { Upload, Circle, Square, Undo, Redo, Save } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/contexts/AppContext';
 import { RiskZoneEditor } from '@/components/games/RiskZoneEditor';
+import { InteractiveCanvas } from '@/components/games/InteractiveCanvas';
 
 interface GameConfig {
   name: string;
@@ -50,14 +51,10 @@ export default function GameBuilder() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [riskZones, setRiskZones] = useState<RiskZone[]>([]);
-  const [selectedTool, setSelectedTool] = useState<'circle' | 'rectangle'>('circle');
-  const [isDrawing, setIsDrawing] = useState(false);
   const [selectedZone, setSelectedZone] = useState<string | null>(null);
   const [undoStack, setUndoStack] = useState<RiskZone[][]>([]);
   const [redoStack, setRedoStack] = useState<RiskZone[][]>([]);
   
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Handle image upload
@@ -99,59 +96,13 @@ export default function GameBuilder() {
     }
   };
 
-  // Handle canvas mouse events
-  const handleCanvasMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!canvasRef.current || !imageRef.current) return;
-    
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    // Scale coordinates to original image size
-    const scaleX = (imageRef.current.naturalWidth || canvas.width) / canvas.width;
-    const scaleY = (imageRef.current.naturalHeight || canvas.height) / canvas.height;
-    const originalX = x * scaleX;
-    const originalY = y * scaleY;
-
-    // Check if clicking on existing zone (using original coordinates)
-    const clickedZone = riskZones.find(zone => {
-      if (zone.type === 'circle') {
-        const distance = Math.sqrt((originalX - zone.x) ** 2 + (originalY - zone.y) ** 2);
-        return distance <= (zone.radius || 0);
-      } else {
-        return originalX >= zone.x && originalX <= zone.x + (zone.width || 0) &&
-               originalY >= zone.y && originalY <= zone.y + (zone.height || 0);
-      }
-    });
-
-    if (clickedZone) {
-      setSelectedZone(clickedZone.id);
-      return;
-    }
-
-    // Start drawing new zone at original coordinates
+  // Create zone handler for InteractiveCanvas
+  const handleZoneCreate = (zone: Omit<RiskZone, 'id'>) => {
     saveToUndoStack();
-    setIsDrawing(true);
-    setSelectedZone(null);
-
     const newZone: RiskZone = {
-      id: `zone-${Date.now()}`,
-      type: selectedTool,
-      x: originalX,
-      y: originalY,
-      color: '#ef4444',
-      description: `Risk Zone ${riskZones.length + 1}`,
-      severity: 'medium'
+      ...zone,
+      id: `zone-${Date.now()}`
     };
-
-    if (selectedTool === 'circle') {
-      newZone.radius = 30;
-    } else {
-      newZone.width = 60;
-      newZone.height = 60;
-    }
-
     setRiskZones(prev => [...prev, newZone]);
   };
 
@@ -168,101 +119,6 @@ export default function GameBuilder() {
     saveToUndoStack();
     setRiskZones(prev => prev.filter(zone => zone.id !== zoneId));
     if (selectedZone === zoneId) {
-      setSelectedZone(null);
-    }
-  };
-
-  // Draw risk zones on canvas
-  const drawRiskZones = () => {
-    if (!canvasRef.current || !imageRef.current) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw image
-    ctx.drawImage(imageRef.current, 0, 0, canvas.width, canvas.height);
-
-    // Calculate scale for display
-    const scaleX = canvas.width / (imageRef.current.naturalWidth || canvas.width);
-    const scaleY = canvas.height / (imageRef.current.naturalHeight || canvas.height);
-
-    // Draw risk zones (scale from original coordinates to display coordinates)
-    riskZones.forEach(zone => {
-      ctx.strokeStyle = zone.id === selectedZone ? '#00ff00' : zone.color;
-      ctx.lineWidth = zone.id === selectedZone ? 3 : 2;
-      ctx.fillStyle = `${zone.color}30`;
-
-      ctx.beginPath();
-      
-      if (zone.type === 'circle') {
-        ctx.arc(
-          zone.x * scaleX, 
-          zone.y * scaleY, 
-          (zone.radius || 20) * scaleX, 
-          0, 
-          2 * Math.PI
-        );
-      } else {
-        ctx.rect(
-          zone.x * scaleX, 
-          zone.y * scaleY, 
-          (zone.width || 40) * scaleX, 
-          (zone.height || 40) * scaleY
-        );
-      }
-      
-      ctx.fill();
-      ctx.stroke();
-
-      // Draw label
-      ctx.fillStyle = '#000000';
-      ctx.font = '12px Arial';
-      ctx.textAlign = 'center';
-      const textX = zone.type === 'circle' 
-        ? zone.x * scaleX 
-        : zone.x * scaleX + (zone.width || 40) * scaleX / 2;
-      const textY = zone.type === 'circle' 
-        ? zone.y * scaleY + 4 
-        : zone.y * scaleY + (zone.height || 40) * scaleY / 2;
-      ctx.fillText(zone.description, textX, textY);
-    });
-  };
-
-  // Handle image load
-  const handleImageLoad = () => {
-    if (canvasRef.current && imageRef.current) {
-      const canvas = canvasRef.current;
-      const maxWidth = 800;
-      const maxHeight = 600;
-      
-      const aspectRatio = imageRef.current.naturalWidth / imageRef.current.naturalHeight;
-      
-      if (aspectRatio > maxWidth / maxHeight) {
-        canvas.width = maxWidth;
-        canvas.height = maxWidth / aspectRatio;
-      } else {
-        canvas.height = maxHeight;
-        canvas.width = maxHeight * aspectRatio;
-      }
-      
-      drawRiskZones();
-    }
-  };
-
-  // Redraw when zones change
-  useEffect(() => {
-    drawRiskZones();
-  }, [riskZones, selectedZone]);
-
-  // Delete selected zone
-  const deleteSelectedZone = () => {
-    if (selectedZone) {
-      saveToUndoStack();
-      setRiskZones(prev => prev.filter(zone => zone.id !== selectedZone));
       setSelectedZone(null);
     }
   };
@@ -304,8 +160,8 @@ export default function GameBuilder() {
       images: [{
         id: `img-${Date.now()}`,
         url: imagePreview,
-        width: imageRef.current?.naturalWidth || 800,
-        height: imageRef.current?.naturalHeight || 600,
+        width: 800, // Standard width for now
+        height: 600, // Standard height for now
         alt: selectedImage.name
       }],
       riskZones: riskZones.map(zone => ({
@@ -464,51 +320,18 @@ export default function GameBuilder() {
                   
                   {imagePreview && (
                     <div className="space-y-4">
-                      <div className="flex gap-2">
-                        <Button
-                          variant={selectedTool === 'circle' ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => setSelectedTool('circle')}
-                        >
-                          <Circle className="h-4 w-4 mr-2" />
-                          Circle
-                        </Button>
-                        <Button
-                          variant={selectedTool === 'rectangle' ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => setSelectedTool('rectangle')}
-                        >
-                          <Square className="h-4 w-4 mr-2" />
-                          Rectangle
-                        </Button>
-                        {selectedZone && (
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={deleteSelectedZone}
-                          >
-                            Delete Zone
-                          </Button>
-                        )}
-                      </div>
-                      
                       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                         <div className="lg:col-span-2">
-                          <div className="relative border rounded-lg overflow-hidden">
-                            <img
-                              ref={imageRef}
-                              src={imagePreview}
-                              alt="Game background"
-                              className="hidden"
-                              onLoad={handleImageLoad}
-                            />
-                            <canvas
-                              ref={canvasRef}
-                              onMouseDown={handleCanvasMouseDown}
-                              className="block max-w-full h-auto cursor-crosshair"
-                              style={{ maxHeight: '600px' }}
-                            />
-                          </div>
+                          <InteractiveCanvas
+                            imageUrl={imagePreview}
+                            imageAlt="Game background"
+                            zones={riskZones}
+                            onZoneCreate={handleZoneCreate}
+                            onZoneUpdate={handleZoneUpdate}
+                            onZoneDelete={handleZoneDelete}
+                            selectedZoneId={selectedZone}
+                            onZoneSelect={setSelectedZone}
+                          />
                         </div>
                         
                         <div className="space-y-4">
