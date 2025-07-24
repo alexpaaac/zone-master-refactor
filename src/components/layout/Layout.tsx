@@ -14,8 +14,8 @@ export function Layout({ children }: LayoutProps) {
 
   // Mock user data - in real app this would come from auth context
   const user = {
-    name: 'Alex Cohen',
-    email: 'alex@cohen3.com',
+    name: 'Thierry Cohen',
+    email: 'thierry@acapella.com',
     avatar: undefined
   };
 

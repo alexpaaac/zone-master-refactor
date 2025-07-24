@@ -42,8 +42,8 @@ export default function Profile() {
   
   const [profile, setProfile] = useState<UserProfile>({
     id: '1',
-    name: 'Alex Cohen',
-    email: 'alex@acapella.com',
+    name: 'Thierry Cohen',
+    email: 'thierry@acapella.com',
     phone: '+33 1 23 45 67 89',
     department: 'Safety & Training',
     role: 'admin',
