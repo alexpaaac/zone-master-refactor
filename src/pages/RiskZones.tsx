@@ -51,8 +51,8 @@ export default function RiskZones() {
   const [templates, setTemplates] = useState<RiskZoneTemplate[]>([
     {
       id: '1',
-      name: 'Electrical Hazard',
-      description: 'Live electrical components or exposed wiring',
+      name: 'Danger électrique',
+      description: 'Composants électriques sous tension ou câblage exposé',
       type: 'circle',
       defaultSize: { radius: 25 },
       color: '#eab308',
@@ -61,8 +61,8 @@ export default function RiskZones() {
     },
     {
       id: '2',
-      name: 'Fall Risk',
-      description: 'Areas with potential for falls or drops',
+      name: 'Risque de chute',
+      description: 'Zones avec risque de chutes ou de dénivellations',
       type: 'rectangle',
       defaultSize: { width: 60, height: 40 },
       color: '#ef4444',
@@ -71,8 +71,8 @@ export default function RiskZones() {
     },
     {
       id: '3',
-      name: 'Chemical Spill',
-      description: 'Chemical storage or spill areas',
+      name: 'Déversement chimique',
+      description: 'Zones de stockage ou de déversement de produits chimiques',
       type: 'circle',
       defaultSize: { radius: 30 },
       color: '#8b5cf6',
@@ -81,8 +81,8 @@ export default function RiskZones() {
     },
     {
       id: '4',
-      name: 'Moving Machinery',
-      description: 'Equipment with moving parts',
+      name: 'Machines en mouvement',
+      description: 'Équipement avec des pièces mobiles',
       type: 'rectangle',
       defaultSize: { width: 80, height: 60 },
       color: '#f97316',
@@ -109,8 +109,8 @@ export default function RiskZones() {
   const handleCreateTemplate = () => {
     if (!newTemplate.name || !newTemplate.description) {
       toast({
-        title: "Error",
-        description: "Please fill in all required fields",
+        title: "Erreur",
+        description: "Veuillez remplir tous les champs obligatoires",
         variant: "destructive"
       });
       return;
@@ -141,8 +141,8 @@ export default function RiskZones() {
     setIsCreating(false);
 
     toast({
-      title: "Template Created",
-      description: `Created new template: ${template.name}`,
+      title: "Modèle créé",
+      description: `Nouveau modèle créé : ${template.name}`,
       variant: "default"
     });
   };
@@ -150,8 +150,8 @@ export default function RiskZones() {
   const handleDeleteTemplate = (id: string) => {
     setTemplates(templates.filter(t => t.id !== id));
     toast({
-      title: "Template Deleted",
-      description: "Risk zone template has been removed",
+      title: "Modèle supprimé",
+      description: "Le modèle de zone de risque a été supprimé",
       variant: "destructive"
     });
   };
@@ -181,19 +181,19 @@ export default function RiskZones() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Risk Zones</h1>
-            <p className="text-muted-foreground">Manage risk zone templates and existing zones</p>
+            <h1 className="text-3xl font-bold">Zones de risque</h1>
+            <p className="text-muted-foreground">Gérer les modèles de zones de risque et les zones existantes</p>
           </div>
           <Button onClick={() => setIsCreating(true)}>
             <Plus className="h-4 w-4 mr-2" />
-            Create Template
+            Créer un modèle
           </Button>
         </div>
 
         <Tabs defaultValue="templates" className="space-y-6">
           <TabsList>
-            <TabsTrigger value="templates">Templates</TabsTrigger>
-            <TabsTrigger value="zones">All Zones</TabsTrigger>
+            <TabsTrigger value="templates">Modèles</TabsTrigger>
+            <TabsTrigger value="zones">Toutes les zones</TabsTrigger>
           </TabsList>
 
           <TabsContent value="templates" className="space-y-6">
@@ -201,22 +201,22 @@ export default function RiskZones() {
             {isCreating && (
               <Card>
                 <CardHeader>
-                  <CardTitle>Create New Template</CardTitle>
+                  <CardTitle>Créer un nouveau modèle</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name">Template Name</Label>
+                      <Label htmlFor="name">Nom du modèle</Label>
                       <Input
                         id="name"
                         value={newTemplate.name}
                         onChange={(e) => setNewTemplate(prev => ({ ...prev, name: e.target.value }))}
-                        placeholder="e.g., Electrical Hazard"
+                        placeholder="ex. : Danger électrique"
                       />
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="category">Category</Label>
+                      <Label htmlFor="category">Catégorie</Label>
                       <Select
                         value={newTemplate.category}
                         onValueChange={(value) => setNewTemplate(prev => ({ ...prev, category: value }))}
@@ -225,17 +225,17 @@ export default function RiskZones() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="safety">Safety</SelectItem>
-                          <SelectItem value="electrical">Electrical</SelectItem>
-                          <SelectItem value="chemical">Chemical</SelectItem>
-                          <SelectItem value="mechanical">Mechanical</SelectItem>
-                          <SelectItem value="environmental">Environmental</SelectItem>
+                          <SelectItem value="safety">Sécurité</SelectItem>
+                          <SelectItem value="electrical">Électrique</SelectItem>
+                          <SelectItem value="chemical">Chimique</SelectItem>
+                          <SelectItem value="mechanical">Mécanique</SelectItem>
+                          <SelectItem value="environmental">Environnemental</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="type">Shape Type</Label>
+                      <Label htmlFor="type">Type de forme</Label>
                       <Select
                         value={newTemplate.type}
                         onValueChange={(value: 'circle' | 'rectangle') => setNewTemplate(prev => ({ ...prev, type: value }))}
@@ -244,14 +244,14 @@ export default function RiskZones() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="circle">Circle</SelectItem>
+                          <SelectItem value="circle">Cercle</SelectItem>
                           <SelectItem value="rectangle">Rectangle</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="severity">Severity</Label>
+                      <Label htmlFor="severity">Gravité</Label>
                       <Select
                         value={newTemplate.severity}
                         onValueChange={(value: 'low' | 'medium' | 'high' | 'critical') => 
@@ -261,16 +261,16 @@ export default function RiskZones() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="low">Low</SelectItem>
-                          <SelectItem value="medium">Medium</SelectItem>
-                          <SelectItem value="high">High</SelectItem>
-                          <SelectItem value="critical">Critical</SelectItem>
+                          <SelectItem value="low">Faible</SelectItem>
+                          <SelectItem value="medium">Moyenne</SelectItem>
+                          <SelectItem value="high">Élevée</SelectItem>
+                          <SelectItem value="critical">Critique</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="color">Color</Label>
+                      <Label htmlFor="color">Couleur</Label>
                       <div className="flex items-center space-x-2">
                         <input
                           id="color"
@@ -294,17 +294,17 @@ export default function RiskZones() {
                       id="description"
                       value={newTemplate.description}
                       onChange={(e) => setNewTemplate(prev => ({ ...prev, description: e.target.value }))}
-                      placeholder="Describe this type of risk zone..."
+                      placeholder="Décrivez ce type de zone de risque..."
                       rows={3}
                     />
                   </div>
                   
                   <div className="flex gap-2">
                     <Button onClick={handleCreateTemplate}>
-                      Create Template
+                      Créer le modèle
                     </Button>
                     <Button variant="outline" onClick={() => setIsCreating(false)}>
-                      Cancel
+                      Annuler
                     </Button>
                   </div>
                 </CardContent>
@@ -345,18 +345,18 @@ export default function RiskZones() {
                       </p>
                       
                       <div className="text-xs text-muted-foreground">
-                        <p>Type: {template.type}</p>
+                        <p>Type : {template.type === 'circle' ? 'Cercle' : 'Rectangle'}</p>
                         {template.type === 'circle' ? (
-                          <p>Default radius: {template.defaultSize.radius}px</p>
+                          <p>Rayon par défaut : {template.defaultSize.radius}px</p>
                         ) : (
-                          <p>Default size: {template.defaultSize.width}×{template.defaultSize.height}px</p>
+                          <p>Taille par défaut : {template.defaultSize.width}×{template.defaultSize.height}px</p>
                         )}
                       </div>
                       
                       <div className="flex gap-2">
                         <Button variant="outline" size="sm" className="flex-1">
                           <Edit className="h-4 w-4 mr-1" />
-                          Edit
+                          Modifier
                         </Button>
                         <Button variant="outline" size="sm">
                           <Copy className="h-4 w-4" />
@@ -380,12 +380,12 @@ export default function RiskZones() {
             {/* All Risk Zones from Games */}
             <Card>
               <CardHeader>
-                <CardTitle>All Risk Zones ({getAllRiskZones().length})</CardTitle>
+                <CardTitle>Toutes les zones de risque ({getAllRiskZones().length})</CardTitle>
               </CardHeader>
               <CardContent>
                 {getAllRiskZones().length === 0 ? (
                   <div className="text-center py-8">
-                    <p className="text-muted-foreground">No risk zones found in any games</p>
+                    <p className="text-muted-foreground">Aucune zone de risque trouvée dans les jeux</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -400,7 +400,7 @@ export default function RiskZones() {
                             <div>
                               <h4 className="font-medium">{zone.description}</h4>
                               <p className="text-sm text-muted-foreground">
-                                From: {zone.gameTitle}
+                                Depuis : {zone.gameTitle}
                               </p>
                             </div>
                           </div>

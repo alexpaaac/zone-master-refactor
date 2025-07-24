@@ -182,8 +182,8 @@ export default function GameBuilder() {
     updateCurrentGame(gameData);
 
     toast({
-      title: "Success",
-      description: "Game created successfully! You can now play it.",
+      title: "Succès",
+      description: "Jeu créé avec succès ! Vous pouvez maintenant y jouer.",
       variant: "default"
     });
   };
@@ -192,7 +192,7 @@ export default function GameBuilder() {
     <Layout>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Game Builder</h1>
+          <h1 className="text-3xl font-bold">Créateur de jeu</h1>
           <div className="flex gap-2">
             <Button
               variant="outline"
@@ -201,7 +201,7 @@ export default function GameBuilder() {
               disabled={undoStack.length === 0}
             >
               <Undo className="h-4 w-4 mr-2" />
-              Undo
+              Annuler
             </Button>
             <Button
               variant="outline"
@@ -210,11 +210,11 @@ export default function GameBuilder() {
               disabled={redoStack.length === 0}
             >
               <Redo className="h-4 w-4 mr-2" />
-              Redo
+              Refaire
             </Button>
             <Button onClick={handleCreateGame}>
               <Save className="h-4 w-4 mr-2" />
-              Create Game
+              Créer le jeu
             </Button>
           </div>
         </div>
@@ -222,7 +222,7 @@ export default function GameBuilder() {
         <Tabs defaultValue="config" className="space-y-6">
           <TabsList>
             <TabsTrigger value="config">Configuration</TabsTrigger>
-            <TabsTrigger value="image">Image & Zones</TabsTrigger>
+            <TabsTrigger value="image">Image et zones</TabsTrigger>
           </TabsList>
 
           <TabsContent value="config" className="space-y-6">

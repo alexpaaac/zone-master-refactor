@@ -31,22 +31,22 @@ const Index = () => {
     {
       id: '1',
       type: 'game_played' as const,
-      title: 'Industrial Safety Assessment completed',
-      subtitle: 'Score: 892 • Time: 4:23',
+      title: 'Évaluation de sécurité industrielle terminée',
+      subtitle: 'Score: 892 • Temps: 4:23',
       timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString()
     },
     {
       id: '2',
       type: 'game_created' as const,
-      title: 'New game created',
-      subtitle: 'Construction Site Hazards',
+      title: 'Nouveau jeu créé',
+      subtitle: 'Dangers du chantier de construction',
       timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString()
     },
     {
       id: '3',
       type: 'game_edited' as const,
-      title: 'Game settings updated',
-      subtitle: 'Factory Safety Training',
+      title: 'Paramètres du jeu mis à jour',
+      subtitle: 'Formation sécurité en usine',
       timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString()
     }
   ];
@@ -63,7 +63,7 @@ const Index = () => {
         setFeaturedGames(featured);
       } catch (error) {
         console.error('Error loading dashboard:', error);
-        toast.error('Failed to load dashboard data');
+        toast.error('Échec du chargement des données du tableau de bord');
       } finally {
         setIsLoading(false);
       }
@@ -74,13 +74,13 @@ const Index = () => {
 
   const handlePlayGame = (game: Game) => {
     dispatch({ type: 'SET_CURRENT_GAME', payload: game });
-    toast.success(`Starting ${game.title}...`);
+    toast.success(`Démarrage de ${game.title}...`);
     // In a real app, this would navigate to the game play screen
   };
 
   const handleEditGame = (game: Game) => {
     dispatch({ type: 'SET_CURRENT_GAME', payload: game });
-    toast.info(`Opening editor for ${game.title}`);
+    toast.info(`Ouverture de l'éditeur pour ${game.title}`);
     // In a real app, this would navigate to the game editor
   };
 
@@ -88,9 +88,9 @@ const Index = () => {
     try {
       const duplicated = await gameService.duplicateGame(game.id);
       dispatch({ type: 'ADD_GAME', payload: duplicated });
-      toast.success(`${game.title} duplicated successfully`);
+      toast.success(`${game.title} dupliqué avec succès`);
     } catch (error) {
-      toast.error('Failed to duplicate game');
+      toast.error('Échec de la duplication du jeu');
     }
   };
 
@@ -98,9 +98,9 @@ const Index = () => {
     try {
       await gameService.deleteGame(game.id);
       dispatch({ type: 'DELETE_GAME', payload: game.id });
-      toast.success(`${game.title} deleted`);
+      toast.success(`${game.title} supprimé`);
     } catch (error) {
-      toast.error('Failed to delete game');
+      toast.error('Échec de la suppression du jeu');
     }
   };
 
@@ -111,16 +111,16 @@ const Index = () => {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-gaming font-bold text-primary">
-              Welcome to Cohen3
+              Bienvenue sur Acapella
             </h1>
             <p className="text-muted-foreground mt-1">
-              Professional risk assessment platform for safety training
+              Plateforme professionnelle d'évaluation des risques et de formation à la sécurité
             </p>
           </div>
           
           <Button variant="gaming" className="self-start">
             <Plus className="mr-2 h-4 w-4" />
-            Create New Game
+            Créer un nouveau jeu
           </Button>
         </div>
 
@@ -134,10 +134,10 @@ const Index = () => {
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold flex items-center gap-2">
                 <Gamepad2 className="h-5 w-5 text-primary" />
-                Featured Games
+                Jeux en vedette
               </h2>
               <Button variant="ghost" size="sm">
-                View all
+                Voir tout
               </Button>
             </div>
             
@@ -170,13 +170,13 @@ const Index = () => {
               <Card className="surface-elevated">
                 <CardContent className="flex flex-col items-center justify-center py-12">
                   <Gamepad2 className="h-16 w-16 text-muted-foreground/50 mb-4" />
-                  <h3 className="text-lg font-medium mb-2">No games yet</h3>
+                  <h3 className="text-lg font-medium mb-2">Aucun jeu pour le moment</h3>
                   <p className="text-muted-foreground text-center mb-4">
-                    Create your first risk assessment game to get started
+                    Créez votre premier jeu d'évaluation des risques pour commencer
                   </p>
                   <Button variant="gaming">
                     <Plus className="mr-2 h-4 w-4" />
-                    Create Your First Game
+                    Créer votre premier jeu
                   </Button>
                 </CardContent>
               </Card>
@@ -194,22 +194,22 @@ const Index = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-primary" />
-              Performance Overview
+              Aperçu des performances
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-3">
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary">89%</div>
-                <div className="text-sm text-muted-foreground">Average Accuracy</div>
+                <div className="text-sm text-muted-foreground">Précision moyenne</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-accent">4:12</div>
-                <div className="text-sm text-muted-foreground">Avg Completion</div>
+                <div className="text-sm text-muted-foreground">Temps moyen</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-success">94%</div>
-                <div className="text-sm text-muted-foreground">Completion Rate</div>
+                <div className="text-sm text-muted-foreground">Taux de réussite</div>
               </div>
             </div>
           </CardContent>

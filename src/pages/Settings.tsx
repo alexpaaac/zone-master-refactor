@@ -160,10 +160,10 @@ export default function Settings() {
     <Layout>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Settings</h1>
+          <h1 className="text-3xl font-bold">Paramètres</h1>
           <Button variant="outline" onClick={resetToDefaults}>
             <RefreshCcw className="h-4 w-4 mr-2" />
-            Reset to Defaults
+            Restaurer par défaut
           </Button>
         </div>
 
@@ -171,31 +171,31 @@ export default function Settings() {
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="general">
               <SettingsIcon className="h-4 w-4 mr-2" />
-              General
+              Général
             </TabsTrigger>
             <TabsTrigger value="branding">
               <Palette className="h-4 w-4 mr-2" />
-              Branding
+              Image de marque
             </TabsTrigger>
             <TabsTrigger value="localization">
               <Globe className="h-4 w-4 mr-2" />
-              Localization
+              Localisation
             </TabsTrigger>
             <TabsTrigger value="advanced">
               <SettingsIcon className="h-4 w-4 mr-2" />
-              Advanced
+              Avancé
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="general" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Game Defaults</CardTitle>
+                <CardTitle>Paramètres par défaut des jeux</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="defaultTimeLimit">Default Time Limit (seconds)</Label>
+                    <Label htmlFor="defaultTimeLimit">Limite de temps par défaut (secondes)</Label>
                     <Input
                       id="defaultTimeLimit"
                       type="number"
@@ -208,7 +208,7 @@ export default function Settings() {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="defaultMaxClicks">Default Max Clicks</Label>
+                    <Label htmlFor="defaultMaxClicks">Nombre max de clics par défaut</Label>
                     <Input
                       id="defaultMaxClicks"
                       type="number"
@@ -221,7 +221,7 @@ export default function Settings() {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="defaultTargetRisks">Default Target Risks</Label>
+                    <Label htmlFor="defaultTargetRisks">Risques cibles par défaut</Label>
                     <Input
                       id="defaultTargetRisks"
                       type="number"
@@ -236,14 +236,14 @@ export default function Settings() {
                 
                 <Button onClick={saveSystemSettings}>
                   <Save className="h-4 w-4 mr-2" />
-                  Save Game Defaults
+                  Sauvegarder les paramètres par défaut
                 </Button>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Auto-Save Settings</CardTitle>
+                <CardTitle>Paramètres de sauvegarde automatique</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center space-x-2">
@@ -255,12 +255,12 @@ export default function Settings() {
                       enableAutoSave: checked 
                     }))}
                   />
-                  <Label htmlFor="enableAutoSave">Enable Auto-Save</Label>
+                  <Label htmlFor="enableAutoSave">Activer la sauvegarde automatique</Label>
                 </div>
                 
                 {systemConfig.enableAutoSave && (
                   <div className="space-y-2">
-                    <Label htmlFor="autoSaveInterval">Auto-Save Interval (seconds)</Label>
+                    <Label htmlFor="autoSaveInterval">Intervalle de sauvegarde automatique (secondes)</Label>
                     <Input
                       id="autoSaveInterval"
                       type="number"
@@ -276,7 +276,7 @@ export default function Settings() {
                 
                 <Button onClick={saveSystemSettings}>
                   <Save className="h-4 w-4 mr-2" />
-                  Save Auto-Save Settings
+                  Sauvegarder les paramètres de sauvegarde automatique
                 </Button>
               </CardContent>
             </Card>
@@ -285,11 +285,11 @@ export default function Settings() {
           <TabsContent value="branding" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Company Information</CardTitle>
+                <CardTitle>Informations de l'entreprise</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="companyName">Company Name</Label>
+                  <Label htmlFor="companyName">Nom de l'entreprise</Label>
                   <Input
                     id="companyName"
                     value={brandingConfig.companyName}
@@ -297,12 +297,12 @@ export default function Settings() {
                       ...prev, 
                       companyName: e.target.value 
                     }))}
-                    placeholder="Enter company name"
+                    placeholder="Entrez le nom de l'entreprise"
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="logo">Company Logo</Label>
+                  <Label htmlFor="logo">Logo de l'entreprise</Label>
                   <div className="flex items-center space-x-4">
                     <input
                       id="logo"
@@ -316,13 +316,13 @@ export default function Settings() {
                       onClick={() => document.getElementById('logo')?.click()}
                     >
                       <Upload className="h-4 w-4 mr-2" />
-                      Upload Logo
+                      Télécharger un logo
                     </Button>
                     {logoPreview && (
                       <div className="w-16 h-16 border rounded-lg overflow-hidden">
                         <img
                           src={logoPreview}
-                          alt="Logo preview"
+                          alt="Aperçu du logo"
                           className="w-full h-full object-contain"
                         />
                       </div>
@@ -332,19 +332,19 @@ export default function Settings() {
                 
                 <Button onClick={saveBrandingSettings}>
                   <Save className="h-4 w-4 mr-2" />
-                  Save Company Info
+                  Sauvegarder les informations
                 </Button>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Color Scheme</CardTitle>
+                <CardTitle>Palette de couleurs</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="primaryColor">Primary Color</Label>
+                    <Label htmlFor="primaryColor">Couleur primaire</Label>
                     <div className="flex items-center space-x-2">
                       <input
                         id="primaryColor"
@@ -368,7 +368,7 @@ export default function Settings() {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="secondaryColor">Secondary Color</Label>
+                    <Label htmlFor="secondaryColor">Couleur secondaire</Label>
                     <div className="flex items-center space-x-2">
                       <input
                         id="secondaryColor"
@@ -394,7 +394,7 @@ export default function Settings() {
                 
                 <Button onClick={saveBrandingSettings}>
                   <Save className="h-4 w-4 mr-2" />
-                  Save Colors
+                  Sauvegarder les couleurs
                 </Button>
               </CardContent>
             </Card>
@@ -403,12 +403,12 @@ export default function Settings() {
           <TabsContent value="localization" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Language & Format Settings</CardTitle>
+                <CardTitle>Paramètres de langue et de format</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="language">Language</Label>
+                    <Label htmlFor="language">Langue</Label>
                     <Select
                       value={systemConfig.language}
                       onValueChange={(value: 'en' | 'fr') => setSystemConfig(prev => ({ 
@@ -427,7 +427,7 @@ export default function Settings() {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="theme">Theme</Label>
+                    <Label htmlFor="theme">Thème</Label>
                     <Select
                       value={systemConfig.theme}
                       onValueChange={(value: 'light' | 'dark' | 'system') => setSystemConfig(prev => ({ 
@@ -439,15 +439,15 @@ export default function Settings() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="light">Light</SelectItem>
-                        <SelectItem value="dark">Dark</SelectItem>
-                        <SelectItem value="system">System</SelectItem>
+                        <SelectItem value="light">Clair</SelectItem>
+                        <SelectItem value="dark">Sombre</SelectItem>
+                        <SelectItem value="system">Système</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="dateFormat">Date Format</Label>
+                    <Label htmlFor="dateFormat">Format de date</Label>
                     <Select
                       value={systemConfig.dateFormat}
                       onValueChange={(value) => setSystemConfig(prev => ({ 
@@ -459,15 +459,15 @@ export default function Settings() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="DD/MM/YYYY">DD/MM/YYYY</SelectItem>
-                        <SelectItem value="MM/DD/YYYY">MM/DD/YYYY</SelectItem>
-                        <SelectItem value="YYYY-MM-DD">YYYY-MM-DD</SelectItem>
+                        <SelectItem value="DD/MM/YYYY">JJ/MM/AAAA</SelectItem>
+                        <SelectItem value="MM/DD/YYYY">MM/JJ/AAAA</SelectItem>
+                        <SelectItem value="YYYY-MM-DD">AAAA-MM-JJ</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="timeFormat">Time Format</Label>
+                    <Label htmlFor="timeFormat">Format d'heure</Label>
                     <Select
                       value={systemConfig.timeFormat}
                       onValueChange={(value: '12h' | '24h') => setSystemConfig(prev => ({ 
@@ -479,8 +479,8 @@ export default function Settings() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="12h">12 Hour</SelectItem>
-                        <SelectItem value="24h">24 Hour</SelectItem>
+                        <SelectItem value="12h">12 heures</SelectItem>
+                        <SelectItem value="24h">24 heures</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -488,7 +488,7 @@ export default function Settings() {
                 
                 <Button onClick={saveSystemSettings}>
                   <Save className="h-4 w-4 mr-2" />
-                  Save Localization
+                  Sauvegarder la localisation
                 </Button>
               </CardContent>
             </Card>
@@ -497,11 +497,11 @@ export default function Settings() {
           <TabsContent value="advanced" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Advanced Settings</CardTitle>
+                <CardTitle>Paramètres avancés</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="customCSS">Custom CSS</Label>
+                  <Label htmlFor="customCSS">CSS personnalisé</Label>
                   <textarea
                     id="customCSS"
                     value={brandingConfig.customCSS}
@@ -509,39 +509,39 @@ export default function Settings() {
                       ...prev, 
                       customCSS: e.target.value 
                     }))}
-                    placeholder="Enter custom CSS..."
+                    placeholder="Entrez du CSS personnalisé..."
                     className="w-full h-32 p-3 border rounded-lg font-mono text-sm"
                   />
                   <p className="text-sm text-muted-foreground">
-                    Add custom CSS to override default styling
+                    Ajoutez du CSS personnalisé pour remplacer le style par défaut
                   </p>
                 </div>
                 
                 <Button onClick={saveBrandingSettings}>
                   <Save className="h-4 w-4 mr-2" />
-                  Save Advanced Settings
+                  Sauvegarder les paramètres avancés
                 </Button>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Data Management</CardTitle>
+                <CardTitle>Gestion des données</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex gap-4">
                   <Button variant="outline">
-                    Export All Data
+                    Exporter toutes les données
                   </Button>
                   <Button variant="outline">
-                    Import Data
+                    Importer des données
                   </Button>
                   <Button variant="destructive">
-                    Clear All Data
+                    Effacer toutes les données
                   </Button>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Manage your application data - export for backup or clear to start fresh
+                  Gérez les données de votre application - exportez pour une sauvegarde ou effacez pour repartir à zéro
                 </p>
               </CardContent>
             </Card>

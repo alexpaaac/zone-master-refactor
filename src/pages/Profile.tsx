@@ -82,8 +82,8 @@ export default function Profile() {
     
     setIsEditing(false);
     toast({
-      title: "Profile Updated",
-      description: "Your profile has been saved successfully",
+      title: "Profil mis à jour",
+      description: "Votre profil a été sauvegardé avec succès",
       variant: "default"
     });
   };
@@ -114,22 +114,22 @@ export default function Profile() {
     <Layout>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Profile</h1>
+          <h1 className="text-3xl font-bold">Profil</h1>
           <div className="flex items-center gap-2">
             {isEditing ? (
               <>
                 <Button variant="outline" onClick={cancelEdit}>
-                  Cancel
+                  Annuler
                 </Button>
                 <Button onClick={saveProfile}>
                   <Save className="h-4 w-4 mr-2" />
-                  Save Changes
+                  Sauvegarder les modifications
                 </Button>
               </>
             ) : (
               <Button onClick={() => setIsEditing(true)}>
                 <Edit3 className="h-4 w-4 mr-2" />
-                Edit Profile
+                Modifier le profil
               </Button>
             )}
           </div>
@@ -139,15 +139,15 @@ export default function Profile() {
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="personal">
               <User className="h-4 w-4 mr-2" />
-              Personal Info
+              Informations personnelles
             </TabsTrigger>
             <TabsTrigger value="activity">
               <Calendar className="h-4 w-4 mr-2" />
-              Activity
+              Activité
             </TabsTrigger>
             <TabsTrigger value="security">
               <Shield className="h-4 w-4 mr-2" />
-              Security
+              Sécurité
             </TabsTrigger>
           </TabsList>
 
