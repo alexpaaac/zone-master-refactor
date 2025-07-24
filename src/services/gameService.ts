@@ -46,6 +46,8 @@ const mockGames: Game[] = [
       primaryColor: '#059669',
       secondaryColor: '#0891b2'
     },
+    publishStatus: 'draft',
+    createdBy: 'user1',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     isActive: true
@@ -79,6 +81,11 @@ const mockGames: Game[] = [
     timeLimit: 240,
     maxClicks: 8,
     difficulty: 'hard',
+    publishStatus: 'published',
+    publishedAt: new Date().toISOString(),
+    shareableLink: 'https://acapella.app/play/game/2',
+    assignedCompany: 'Lidl Construction',
+    createdBy: 'admin1',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     isActive: true

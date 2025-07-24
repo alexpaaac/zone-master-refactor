@@ -37,10 +37,10 @@ export function Header({ onMenuToggle, user }: HeaderProps) {
           
           <div className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
-              <span className="text-sm font-gaming font-bold text-primary-foreground">C3</span>
+              <span className="text-sm font-gaming font-bold text-primary-foreground">AC</span>
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg font-gaming font-bold text-primary">Cohen3</h1>
+              <h1 className="text-lg font-gaming font-bold text-primary">Acapella</h1>
               <p className="text-xs text-muted-foreground">Risk Assessment Platform</p>
             </div>
           </div>
@@ -71,11 +71,11 @@ export function Header({ onMenuToggle, user }: HeaderProps) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => window.location.href = '/profile'}>
                 <User className="mr-2 h-4 w-4" />
                 Profile
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => window.location.href = '/settings'}>
                 <Settings className="mr-2 h-4 w-4" />
                 Settings
               </DropdownMenuItem>

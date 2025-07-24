@@ -44,6 +44,11 @@ export interface Game {
     secondaryColor: string;
     logo?: string;
   };
+  publishStatus: 'draft' | 'published';
+  publishedAt?: string;
+  shareableLink?: string;
+  assignedCompany?: string;
+  createdBy?: string;
   createdAt: string;
   updatedAt: string;
   isActive: boolean;

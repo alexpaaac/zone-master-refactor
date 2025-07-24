@@ -10,6 +10,7 @@ import GameBuilder from "./pages/GameBuilder";
 import GamePlayer from "./pages/GamePlayer";
 import GameResults from "./pages/GameResults";
 import Settings from "./pages/Settings";
+import Profile from "./pages/Profile";
 import Games from "./pages/Games";
 import RiskZones from "./pages/RiskZones";
 import Analytics from "./pages/Analytics";
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/zones" element={<RiskZones />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/profile" element={<Profile />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

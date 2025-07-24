@@ -316,6 +316,8 @@ export default function GameBuilder() {
       maxClicks: gameConfig.maxClicks,
       targetRisks: gameConfig.targetRisks,
       difficulty: 'medium' as const,
+      publishStatus: 'draft' as const,
+      createdBy: 'current-user',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       isActive: true
