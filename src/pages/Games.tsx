@@ -157,12 +157,12 @@ export default function Games() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Games</h1>
-            <p className="text-muted-foreground">Manage your risk hunt games</p>
+            <h1 className="text-3xl font-bold">Jeux</h1>
+            <p className="text-muted-foreground">Gérez vos jeux de chasse aux risques</p>
           </div>
           <Button onClick={() => navigate('/builder')}>
             <Plus className="h-4 w-4 mr-2" />
-            Create New Game
+            Créer un nouveau jeu
           </Button>
         </div>
 
@@ -174,7 +174,7 @@ export default function Games() {
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search games..."
+                    placeholder="Rechercher des jeux..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10"

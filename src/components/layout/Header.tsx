@@ -41,7 +41,7 @@ export function Header({ onMenuToggle, user }: HeaderProps) {
             </div>
             <div className="hidden sm:block">
               <h1 className="text-lg font-gaming font-bold text-primary">Acapella</h1>
-              <p className="text-xs text-muted-foreground">Risk Assessment Platform</p>
+              <p className="text-xs text-muted-foreground">Plateforme d'Évaluation des Risques</p>
             </div>
           </div>
         </div>
@@ -73,11 +73,11 @@ export function Header({ onMenuToggle, user }: HeaderProps) {
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => window.location.href = '/profile'}>
                 <User className="mr-2 h-4 w-4" />
-                Profile
+                Profil
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => window.location.href = '/settings'}>
                 <Settings className="mr-2 h-4 w-4" />
-                Settings
+                Paramètres
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-destructive">
