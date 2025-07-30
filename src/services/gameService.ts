@@ -95,7 +95,31 @@ const mockGames: Game[] = [
 class GameService {
   private baseUrl = '/api/games';
   private cache = new Map<string, Game>();
-  private games: Game[] = mockGames; // Use mock data for now
+  private games: Game[] = [];
+
+  constructor() {
+    // Load games from localStorage on initialization
+    const savedGames = localStorage.getItem('acapella_games');
+    if (savedGames) {
+      try {
+        this.games = JSON.parse(savedGames);
+      } catch (e) {
+        console.error('Error loading saved games:', e);
+        this.games = [...mockGames];
+      }
+    } else {
+      this.games = [...mockGames];
+    }
+  }
+
+  // Save games to localStorage
+  private saveToStorage(): void {
+    try {
+      localStorage.setItem('acapella_games', JSON.stringify(this.games));
+    } catch (e) {
+      console.error('Error saving games to storage:', e);
+    }
+  }
 
   // Get all games with pagination
   async getGames(page = 1, limit = 10, filters?: { difficulty?: string; isActive?: boolean }): Promise<PaginatedResponse<Game>> {
@@ -161,6 +185,7 @@ class GameService {
 
       this.games.unshift(newGame);
       this.cache.set(newGame.id, newGame);
+      this.saveToStorage();
       
       return newGame;
     } catch (error) {
@@ -185,6 +210,7 @@ class GameService {
 
       this.games[gameIndex] = updatedGame;
       this.cache.set(id, updatedGame);
+      this.saveToStorage();
       
       return updatedGame;
     } catch (error) {
@@ -203,6 +229,7 @@ class GameService {
 
       this.games.splice(gameIndex, 1);
       this.cache.delete(id);
+      this.saveToStorage();
     } catch (error) {
       console.error('Error deleting game:', error);
       throw new Error('Failed to delete game');

@@ -188,9 +188,9 @@ export default function Analytics() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Tous les jeux</SelectItem>
-                {analyticsData.gamePerformance.map((game) => (
-                  <SelectItem key={game.gameId} value={game.gameId}>
-                    {game.gameTitle}
+                {games.map((game) => (
+                  <SelectItem key={game.id} value={game.id}>
+                    {game.title}
                   </SelectItem>
                 ))}
               </SelectContent>

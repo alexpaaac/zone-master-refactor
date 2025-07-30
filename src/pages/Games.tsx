@@ -187,9 +187,9 @@ export default function Games() {
                     <SelectValue placeholder="Status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="draft">Draft</SelectItem>
-                    <SelectItem value="published">Published</SelectItem>
+                    <SelectItem value="all">Tous statuts</SelectItem>
+                    <SelectItem value="draft">Brouillon</SelectItem>
+                    <SelectItem value="published">Publié</SelectItem>
                   </SelectContent>
                 </Select>
                 
@@ -198,10 +198,10 @@ export default function Games() {
                     <SelectValue placeholder="Difficulty" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Difficulties</SelectItem>
-                    <SelectItem value="easy">Easy</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="hard">Hard</SelectItem>
+                    <SelectItem value="all">Toutes difficultés</SelectItem>
+                    <SelectItem value="easy">Facile</SelectItem>
+                    <SelectItem value="medium">Moyen</SelectItem>
+                    <SelectItem value="hard">Difficile</SelectItem>
                     <SelectItem value="expert">Expert</SelectItem>
                   </SelectContent>
                 </Select>
@@ -212,7 +212,7 @@ export default function Games() {
                       <SelectValue placeholder="Company" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Companies</SelectItem>
+                      <SelectItem value="all">Toutes entreprises</SelectItem>
                       {companies.map(company => (
                         <SelectItem key={company} value={company}>
                           {company}
@@ -231,16 +231,16 @@ export default function Games() {
           {filteredGames.length === 0 ? (
             <div className="col-span-full text-center py-12">
               <div className="max-w-md mx-auto">
-                <h3 className="text-lg font-semibold mb-2">No games found</h3>
+                <h3 className="text-lg font-semibold mb-2">Aucun jeu trouvé</h3>
                 <p className="text-muted-foreground mb-4">
                   {searchTerm || filterDifficulty !== 'all' 
-                    ? 'Try adjusting your search or filters'
-                    : 'Create your first game to get started'
+                    ? 'Essayez d\'ajuster votre recherche ou vos filtres'
+                    : 'Créez votre premier jeu pour commencer'
                   }
                 </p>
                 <Button onClick={() => navigate('/builder')}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Create Your First Game
+                  Créer votre premier jeu
                 </Button>
               </div>
             </div>
@@ -254,9 +254,9 @@ export default function Games() {
                         <CardTitle className="text-lg">{game.title}</CardTitle>
                         <Badge variant={game.publishStatus === 'published' ? 'default' : 'secondary'}>
                           {game.publishStatus === 'published' ? (
-                            <><Globe className="h-3 w-3 mr-1" />Published</>
+                            <><Globe className="h-3 w-3 mr-1" />Publié</>
                           ) : (
-                            <><Edit className="h-3 w-3 mr-1" />Draft</>
+                            <><Edit className="h-3 w-3 mr-1" />Brouillon</>
                           )}
                         </Badge>
                       </div>
@@ -275,7 +275,9 @@ export default function Games() {
                       game.difficulty === 'medium' ? 'secondary' :
                       game.difficulty === 'hard' ? 'default' : 'destructive'
                     }>
-                      {game.difficulty}
+                      {game.difficulty === 'easy' ? 'Facile' :
+                       game.difficulty === 'medium' ? 'Moyen' :
+                       game.difficulty === 'hard' ? 'Difficile' : 'Expert'}
                     </Badge>
                   </div>
                 </CardHeader>
@@ -299,11 +301,11 @@ export default function Games() {
                     </div>
                     <div className="flex items-center gap-1">
                       <Target className="h-3 w-3 text-muted-foreground" />
-                      <span>{game.riskZones.length} risks</span>
+                      <span>{game.riskZones.length} risques</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <Users className="h-3 w-3 text-muted-foreground" />
-                      <span>{game.maxClicks || 17} clicks</span>
+                      <span>{game.maxClicks || 17} clics</span>
                     </div>
                   </div>
 
@@ -315,7 +317,15 @@ export default function Games() {
                       size="sm"
                     >
                       <Play className="h-4 w-4 mr-1" />
-                      Play
+                      Jouer
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handlePlayGame(game)}
+                      className="px-3"
+                    >
+                      Test
                     </Button>
                     <Button
                       variant="outline"
@@ -359,19 +369,36 @@ export default function Games() {
                   {/* Game Info */}
                   <div className="text-xs text-muted-foreground space-y-1">
                     <div className="flex items-center justify-between">
-                      <span>Created: {new Date(game.createdAt).toLocaleDateString()}</span>
+                      <span>Créé: {new Date(game.createdAt).toLocaleDateString()}</span>
                       {game.isActive && (
                         <Badge variant="outline" className="text-xs">
-                          Active
+                          Actif
                         </Badge>
                       )}
                     </div>
                     {game.publishedAt && (
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
-                        <span>Published: {new Date(game.publishedAt).toLocaleDateString()}</span>
+                        <span>Publié: {new Date(game.publishedAt).toLocaleDateString()}</span>
                       </div>
                     )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full mt-2"
+                      onClick={() => {
+                        const link = `${window.location.origin}/play/shared/${game.id}`;
+                        navigator.clipboard.writeText(link);
+                        toast({
+                          title: "Lien copié",
+                          description: "Lien d'export copié dans le presse-papiers",
+                          variant: "default"
+                        });
+                      }}
+                    >
+                      <Link className="h-3 w-3 mr-1" />
+                      Exporter
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -383,9 +410,9 @@ export default function Games() {
         <Dialog open={shareDialogOpen} onOpenChange={setShareDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Share Game</DialogTitle>
+              <DialogTitle>Partager le jeu</DialogTitle>
               <DialogDescription>
-                Share this game with external organizations
+                Partagez ce jeu avec des organisations externes
               </DialogDescription>
             </DialogHeader>
             
@@ -397,7 +424,7 @@ export default function Games() {
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Shareable Link:</label>
+                  <label className="text-sm font-medium">Lien partageable:</label>
                   <div className="flex gap-2">
                     <Input 
                       value={selectedGameForShare.shareableLink || generateShareableLink(selectedGameForShare.id)}
@@ -414,14 +441,14 @@ export default function Games() {
                 </div>
                 
                 <div className="text-sm text-muted-foreground">
-                  Share this link with organizations like Lidl, Yoplait, or other companies to let them test their employees with this risk assessment game.
+                  Partagez ce lien avec des organisations comme Lidl, Yoplait ou d'autres entreprises pour leur permettre de tester leurs employés avec ce jeu d'évaluation des risques.
                 </div>
               </div>
             )}
             
             <DialogFooter>
               <Button variant="outline" onClick={() => setShareDialogOpen(false)}>
-                Close
+                Fermer
               </Button>
             </DialogFooter>
           </DialogContent>

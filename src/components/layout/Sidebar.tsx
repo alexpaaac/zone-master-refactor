@@ -19,11 +19,11 @@ interface SidebarProps {
 }
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: Home },
-  { name: 'Games', href: '/games', icon: Gamepad2 },
-  { name: 'Risk Zones', href: '/zones', icon: Shield },
+  { name: 'Tableau de bord', href: '/', icon: Home },
+  { name: 'Jeux', href: '/games', icon: Gamepad2 },
+  { name: 'Zones de risque', href: '/zones', icon: Shield },
   { name: 'Analytics', href: '/analytics', icon: BarChart3 },
-  { name: 'Settings', href: '/settings', icon: Settings },
+  { name: 'Paramètres', href: '/settings', icon: Settings },
 ];
 
 export function Sidebar({ isOpen, onToggle }: SidebarProps) {
@@ -97,7 +97,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
                 }
               >
                 <Plus className="h-4 w-4 shrink-0" />
-                {isOpen && <span>New Game</span>}
+                {isOpen && <span>Nouveau jeu</span>}
               </NavLink>
             </div>
           </nav>
@@ -107,7 +107,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
             {isOpen ? (
               <div className="text-xs text-muted-foreground">
                 <p className="font-medium">Version 3.0</p>
-                <p>Risk Assessment Platform</p>
+                <p>Plateforme d'évaluation des risques</p>
               </div>
             ) : (
               <div className="text-center">

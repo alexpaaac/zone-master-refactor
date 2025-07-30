@@ -92,8 +92,8 @@ export default function GamePlayer() {
     }, 1000);
 
     toast({
-      title: "Game Started!",
-      description: `Good luck, ${name}!`,
+      title: "Jeu commencé !",
+      description: `Bonne chance, ${name} !`,
       variant: "default"
     });
   };
@@ -128,8 +128,8 @@ export default function GamePlayer() {
     updateCurrentSession(finalSession);
 
     toast({
-      title: "Game Complete!",
-      description: `Score: ${score} | Found: ${foundRisks}/${totalRisks} risks`,
+      title: "Jeu terminé !",
+      description: `Score: ${score} | Trouvé: ${foundRisks}/${totalRisks} risques`,
       variant: "default"
     });
   };
@@ -141,8 +141,8 @@ export default function GamePlayer() {
     // Check click limit
     if (gameSession.clicks.length >= (currentGame.maxClicks || 17)) {
       toast({
-        title: "No More Clicks!",
-        description: "You've used all your clicks. Game ending...",
+        title: "Plus de clics !",
+        description: "Vous avez utilisé tous vos clics. Fin du jeu...",
         variant: "destructive"
       });
       endGame(); // Auto-end game when out of clicks
@@ -196,7 +196,7 @@ export default function GamePlayer() {
 
     if (hitZone && !gameSession.foundZones.includes(hitZone.id)) {
       toast({
-        title: "Risk Found!",
+        title: "Risque trouvé !",
         description: hitZone.description,
         variant: "default"
       });
@@ -324,12 +324,12 @@ export default function GamePlayer() {
         <div className="flex items-center justify-center min-h-[60vh]">
           <Card className="w-full max-w-md">
             <CardHeader>
-              <CardTitle>Enter Your Name</CardTitle>
+              <CardTitle>Entrez votre nom</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <input
                 type="text"
-                placeholder="Player name"
+                placeholder="Nom du joueur"
                 className="w-full p-3 border rounded-lg"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
@@ -344,7 +344,7 @@ export default function GamePlayer() {
                 className="w-full"
                 disabled={!playerName.trim()}
               >
-                Start Game
+                Commencer le jeu
               </Button>
             </CardContent>
           </Card>
@@ -357,8 +357,8 @@ export default function GamePlayer() {
     return (
       <Layout>
         <div className="text-center py-12">
-          <h2 className="text-2xl font-bold mb-4">No Game Selected</h2>
-          <p className="text-muted-foreground">Please select a game to play.</p>
+          <h2 className="text-2xl font-bold mb-4">Aucun jeu sélectionné</h2>
+          <p className="text-muted-foreground">Veuillez sélectionner un jeu à jouer.</p>
         </div>
       </Layout>
     );
@@ -401,11 +401,11 @@ export default function GamePlayer() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">{currentGame.title}</h1>
-            <p className="text-muted-foreground">Player: {playerName}</p>
+            <p className="text-muted-foreground">Joueur: {playerName}</p>
           </div>
           {gameCompleted && (
             <Badge variant="outline" className="text-lg px-4 py-2">
-              Game Complete!
+              Jeu terminé !
             </Badge>
           )}
         </div>
@@ -417,7 +417,7 @@ export default function GamePlayer() {
               <div className="flex items-center space-x-2">
                 <Timer className="h-5 w-5 text-primary" />
                 <div>
-                  <p className="text-sm font-medium">Time Remaining</p>
+                  <p className="text-sm font-medium">Temps restant</p>
                   <p className="text-2xl font-bold text-primary">
                     {formatTime(timeRemaining)}
                   </p>
@@ -431,7 +431,7 @@ export default function GamePlayer() {
               <div className="flex items-center space-x-2">
                 <Target className="h-5 w-5 text-green-600" />
                 <div>
-                  <p className="text-sm font-medium">Risks Found</p>
+                  <p className="text-sm font-medium">Risques trouvés</p>
                   <p className="text-2xl font-bold text-green-600">
                     {gameSession?.foundZones.length || 0}/{currentGame.riskZones.length}
                   </p>
@@ -445,7 +445,7 @@ export default function GamePlayer() {
               <div className="flex items-center space-x-2">
                 <MousePointer className="h-5 w-5 text-blue-600" />
                 <div>
-                  <p className="text-sm font-medium">Clicks Used</p>
+                  <p className="text-sm font-medium">Clics utilisés</p>
                   <p className="text-2xl font-bold text-blue-600">
                     {gameSession?.clicks.length || 0}/{currentGame.maxClicks}
                   </p>
@@ -478,8 +478,8 @@ export default function GamePlayer() {
           <CardContent className="p-4">
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span>Progress</span>
-                <span>{gameSession?.foundZones.length || 0}/{currentGame.targetRisks} risks</span>
+                <span>Progression</span>
+                <span>{gameSession?.foundZones.length || 0}/{currentGame.targetRisks} risques</span>
               </div>
               <Progress 
                 value={((gameSession?.foundZones.length || 0) / currentGame.targetRisks) * 100} 
@@ -513,21 +513,21 @@ export default function GamePlayer() {
               
               {isGameActive && (
                 <p className="mt-4 text-sm text-muted-foreground">
-                  Click on the image to identify risk zones
+                  Cliquez sur l'image pour identifier les zones de risque
                 </p>
               )}
               
               {gameCompleted && (
                 <div className="mt-4 p-4 bg-green-50 rounded-lg">
-                  <h3 className="font-semibold text-green-800">Game Summary</h3>
+                  <h3 className="font-semibold text-green-800">Résumé du jeu</h3>
                   <p className="text-green-700">
-                    Found {gameSession?.foundZones.length} out of {currentGame.riskZones.length} risks
+                    Trouvé {gameSession?.foundZones.length} sur {currentGame.riskZones.length} risques
                   </p>
                   <p className="text-green-700">
-                    Used {gameSession?.clicks.length} out of {currentGame.maxClicks} clicks
+                    Utilisé {gameSession?.clicks.length} sur {currentGame.maxClicks} clics
                   </p>
                   <p className="text-green-700">
-                    Final Score: {gameSession?.score}
+                    Score final: {gameSession?.score}
                   </p>
                 </div>
               )}
